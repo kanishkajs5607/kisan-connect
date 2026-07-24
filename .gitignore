@@ -1,0 +1,11 @@
+# Flutter
+mobile_app/build/
+mobile_app/.dart_tool/
+
+# Python / AI
+ai_backend/__pycache__/
+ai_backend/venv/
+
+# Secrets
+*.env
+google-services.json
