@@ -8,4 +8,4 @@ KisanConnect is an AI + IoT platform that predicts labor and machine shortages b
 * **Mobile App:** Flutter & Firebase
 * **IoT Hardware:** ESP32 + GPS Module
 * **AI Engine:** Python (Crop stage + Weather-based demand forecasting)
-*
+
