@@ -30,6 +30,11 @@ KisanConnect is an AI + IoT-powered platform designed to predict and mitigate fa
 
 ---
 
+## System Architecture
+
+https://app.eraser.io/workspace/07sKZXh2EQnkrvhneHlt?diagram=p20doOpWmVJyKqVcXhEj
+
+
 ## ⚙️ Getting Started
 
 ### 1. AI Backend
