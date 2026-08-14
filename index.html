@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KisanConnect - Smart Farm Network</title>
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Language Selection Modal -->
+   <!-- Replace the modal div inside index.html with this updated version -->
+<div id="language-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-icon">🌐</div>
+        <h2 id="lbl-modal-title">Welcome to KisanConnect</h2>
+        <p class="modal-sub" id="lbl-modal-sub">Select preferred language / மொழி தேர்வு / भाषा चुनें:</p>
+        <div class="lang-grid">
+            <button onclick="selectLanguage('en')" class="btn-lang-opt">English</button>
+            <button onclick="selectLanguage('hi')" class="btn-lang-opt">हिंदी (Hindi)</button>
+            <button onclick="selectLanguage('mr')" class="btn-lang-opt">मराठी (Marathi)</button>
+            <button onclick="selectLanguage('ta')" class="btn-lang-opt">தமிழ் (Tamil)</button>
+        </div>
+    </div>
+</div>
+    <div class="app-layout">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="logo.jpeg" alt="KisanConnect Logo" class="brand-logo" onerror="this.src='logo.jpg'">
+            </div>
+
+            <nav class="sidebar-menu">
+                <button class="nav-btn active" onclick="switchTab('dashboard')" id="tab-dash">
+                    <span class="icon">📊</span> <span id="lbl-dash">AI Dashboard</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('fleet')" id="tab-fleet">
+                    <span class="icon">🛰️</span> <span id="lbl-fleet">IoT Fleet & Maps</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('collab')" id="tab-collab">
+                    <span class="icon">🤝</span> <span id="lbl-collab">Collaboration Pool</span>
+                </button>
+                <button class="nav-btn" onclick="switchTab('escrow')" id="tab-escrow">
+                    <span class="icon">🔒</span> <span id="lbl-escrow">Escrow Vault</span>
+                </button>
+            </nav>
+
+            <!-- Weather Widget -->
+            <div class="weather-widget">
+                <div class="weather-badge" id="lbl-weather-badge">⚡ IMD LIVE FEED</div>
+                <h4 id="weather-loc">Kopargaon, MH</h4>
+                <div class="temp-row">
+                    <span class="temp">32°C</span>
+                    <span class="humidity" id="lbl-humidity">Humidity: 45%</span>
+                </div>
+                <p class="weather-alert" id="lbl-weather-alert">⚠️ Heavy harvest weather window in 4 days. AI recommends pre-booking.</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div class="live-ticker">
+                    <span class="pulse-dot"></span> <strong id="lbl-ticker-title">Live Network Stats:</strong> <span id="lbl-ticker-body">14 Tractors Active | ₹1,20,000 Escrow Protected</span>
+                </div>
+                <div class="topbar-right">
+                    <button class="lang-pill" onclick="openLangModal()">🌐 <span id="current-lang-text">English</span></button>
+                    <div class="user-profile">
+                        <span class="user-avatar">👤</span>
+                        <span class="user-name">Ramesh Patil</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- SECTION 1: AI DASHBOARD -->
+            <section id="view-dashboard" class="content-tab active">
+                <div class="banner-alert">
+                    <div class="banner-title" id="lbl-banner-title">🤖 AI Shortage Predictor Engine Active</div>
+                    <p id="lbl-banner-desc">Continuously processing farmer-entered crop stages & IMD weather forecast data.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-stat1-title">ACTIVE TRACTORS NEAR YOU</span>
+                        <div class="stat-value">14 <span class="unit" id="lbl-stat1-unit">Units</span></div>
+                        <span class="stat-sub green" id="lbl-stat1-sub">8 available right now</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-stat2-title">LABOUR SHORTAGE RISK</span>
+                        <div class="stat-value orange" id="lbl-stat2-val">Moderate</div>
+                        <span class="stat-sub" id="lbl-stat2-sub">Surge expected in Day 5</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-stat3-title">ESCROW VAULT BALANCE</span>
+                        <div class="stat-value">₹12,450</div>
+                        <span class="stat-sub" id="lbl-stat3-sub">100% Secured</span>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3 id="lbl-rec-title">🌱 Current Crop Stage & Recommendations</h3>
+                    <div class="recommendation-box">
+                        <div class="rec-header">
+                            <strong id="lbl-crop-stage">SUGARCANE - HARVEST STAGE</strong>
+                            <span class="badge badge-warn" id="lbl-crop-req">Harvester & 4 Labours Required</span>
+                        </div>
+                        <p id="lbl-crop-window">Estimated window: July 28 - July 30 based on local forecast data.</p>
+                        <button class="btn-action" onclick="switchTab('fleet')" id="lbl-btn-book">Book Equipment Now</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: IOT FLEET & LIVE MAP -->
+            <section id="view-fleet" class="content-tab">
+                <div class="tab-header">
+                    <h2 id="lbl-fleet-title">IoT Machine Fleet & GPS Tracking</h2>
+                    <p id="lbl-fleet-desc">Real-time coordinates powered by ESP32 + GPS trackers installed on machinery.</p>
+                </div>
+
+                <!-- Live Embedded Interactive Map -->
+                <div class="map-container">
+                   
+<div class="map-header-bar">
+    <!-- Live Weather Alert Banner -->
+    <div id="weatherAlertBanner" class="weather-alert-banner">
+        <span id="weatherText">⚡ IMD Forecast: Loading local weather...</span>
+    </div>
+
+    <!-- Location Search & Voice Controls -->
+    <div class="location-search-box">
+        <input type="text" id="mapSearchInput" placeholder="Enter village, city, or district..." onkeypress="handleSearchKey(event)">
+        <button onclick="startVoiceSearch()" class="btn-voice" title="Voice Search">🎙️ Voice</button>
+        <button onclick="searchLocation()" class="btn-search">🔍 Search</button>
+        <button onclick="useCurrentLocation()" class="btn-gps" title="Use my current GPS location">🎯 Current Location</button>
+    </div>
+
+    <!-- Filter Buttons (Single Instance) -->
+    <div class="filter-pills">
+        <button class="filter-btn active" onclick="filterMapMarkers('all', this)" id="lbl-filter-all">All Pins</button>
+        <button class="filter-btn" onclick="filterMapMarkers('owner', this)" id="lbl-filter-owners">🚜 Machine Owners</button>
+        <button class="filter-btn" onclick="filterMapMarkers('demand', this)" id="lbl-filter-demands">🔴 Farmer Demands</button>
+        <button class="filter-btn" onclick="filterMapMarkers('labour', this)" id="lbl-filter-labours">👷 Labour Groups</button>
+    </div>
+
+    <!-- Radius Selector (Single Instance) -->
+    <div class="radius-selector">
+        <label id="lbl-radius-tag">Search Radius: </label>
+        <select id="radiusSelect" onchange="updateRadiusCircle()">
+            <option value="5">5 km</option>
+            <option value="10" selected>10 km</option>
+            <option value="20">20 km</option>
+        </select>
+    </div>
+
+    <div class="radius-selector">
+        <label id="lbl-radius-tag">Search Radius: </label>
+        <select id="radiusSelect" onchange="updateRadiusCircle()">
+            <option value="5">5 km</option>
+            <option value="10" selected>10 km</option>
+            <option value="20">20 km</option>
+        </select>
+    </div>
+</div>
+
+                    <div id="map"></div>
+
+                    <div class="map-legend">
+                        <span><strong style="color:#16a34a;" id="lbl-leg-green">🟢 Green:</strong> <span id="lbl-leg-green-txt">Machine Owners</span></span>
+                        <span><strong style="color:#dc2626;" id="lbl-leg-red">🔴 Red:</strong> <span id="lbl-leg-red-txt">Farmers Needing Machines</span></span>
+                        <span><strong style="color:#ea580c;" id="lbl-leg-orange">🟡 Orange:</strong> <span id="lbl-leg-orange-txt">Labours Ready for Hire</span></span>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="machine-card">
+                        <div class="card-status green" id="lbl-card1-status">🟢 Available Now • Aadhaar Verified</div>
+                        <h3>Mahindra 575 DI Tractor</h3>
+                        <p><span id="lbl-card1-owner">Owner</span>: Suresh Deshmukh (<span id="lbl-card1-trust">Trust Score</span>: 4.8/5)</p>
+                        <p class="location">📍 Sector 4, Kopargaon</p>
+                        <div class="card-price">₹700 / <span class="lbl-hour">Hour</span></div>
+                        <button class="btn-action" onclick="alertBooking('Mahindra 575 DI Tractor', 'Suresh Deshmukh')" id="lbl-card1-btn">Book with Escrow Protection</button>
+                    </div>
+
+                    <div class="machine-card">
+                        <div class="card-status orange" id="lbl-card2-status">🟡 Busy (Free in 2 hours)</div>
+                        <h3>Rotavator 6-Feet Heavy</h3>
+                        <p><span id="lbl-card2-owner">Owner</span>: Anil Kale (<span id="lbl-card2-trust">Trust Score</span>: 4.9/5)</p>
+                        <p class="location">📍 Sector 2, Shirdi Road</p>
+                        <div class="card-price">₹450 / <span class="lbl-hour">Hour</span></div>
+                        <button class="btn-secondary" onclick="alertBooking('Rotavator 6-Feet', 'Anil Kale')" id="lbl-card2-btn">Pre-book Slot</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: COLLABORATION POOL -->
+            <section id="view-collab" class="content-tab">
+                <div class="tab-header">
+                    <h2 id="lbl-collab-title">Farmer Collaboration & Cost Splitting</h2>
+                    <p id="lbl-collab-desc">Neighbouring farms pool together to book heavy machinery and split transport costs.</p>
+                </div>
+                <div class="section-card">
+                    <h3 id="lbl-pool-head">Active Pooling Requests near Kopargaon</h3>
+                    <div class="pool-box">
+                        <h4 id="lbl-pool-item-title">Combined Sugarcane Harvester Pool</h4>
+                        <p id="lbl-pool-item-desc">Participants: Ramesh Patil + 2 nearby farms</p>
+                        <span class="badge badge-success" id="lbl-pool-badge">💰 Cost Reduction: Save ~35% on deployment</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: ESCROW VAULT -->
+            <section id="view-escrow" class="content-tab">
+                <div class="tab-header">
+                    <h2 id="lbl-escrow-title">Escrow Secured Payments Vault</h2>
+                    <p id="lbl-escrow-desc">Funds remain locked safely until agricultural work is verified complete.</p>
+                </div>
+                <div class="section-card">
+                    <div class="escrow-item">
+                        <div>
+                            <strong id="lbl-escrow-item-title">Booking #KC-8921 (Mahindra Tractor)</strong>
+                            <p id="lbl-escrow-item-desc">Secured Amount: ₹1,400</p>
+                        </div>
+                        <span class="badge badge-locked" id="lbl-escrow-badge">🔒 Locked in Vault</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Leaflet Map JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
